@@ -1,8 +1,9 @@
+import config from "./config/config.js";
 import app from "./app.js";
 
 const main = async () => {
-  app.listen(3000, () => {
-    console.log("Server is running on http://localhost:3000");
+  app.listen(config.port, () => {
+    console.log(`Server is running on http://localhost:${config.port}`);
   });
 };
 
