@@ -13,14 +13,22 @@ const config = {
     process.env.BCRYPT_SALT_ROUNDS && parseInt(process.env.BCRYPT_SALT_ROUNDS),
 };
 
+interface Config {
+  port: number;
+  databaseUrl: string;
+  jwtSecret: string;
+  jwtExpiresIn: string;
+  bcryptSaltRounds: number;
+}
+
 const validateConfig = () => {
   for (const [key, value] of Object.entries(config)) {
     if (!value) {
       throw new Error(`Config '${key}' is not defined`);
     }
   }
-  console.log("config validated successfully");
-  return config;
+
+  return config as Config;
 };
 
 export default validateConfig();
