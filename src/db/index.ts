@@ -1,6 +1,5 @@
 import { Pool } from "pg";
 import config from "../config/config.js";
-console.log(config);
 
 const pool = new Pool({
   host: "aws-1-ap-northeast-2.pooler.supabase.com",
@@ -11,7 +10,6 @@ const pool = new Pool({
 });
 
 const initializeDatabase = async () => {
-  console.log(config.databaseUrl);
   await pool.query(`
     CREATE TABLE IF NOT EXISTS users  (
       id SERIAL PRIMARY KEY,

@@ -8,6 +8,11 @@ app.use(
     credentials: true,
   }),
 );
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+import issueRouter from "./modules/issue/issue.route.js";
+app.use("/api/issues", issueRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello, World!");
