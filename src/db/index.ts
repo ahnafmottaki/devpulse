@@ -1,5 +1,4 @@
 import { Pool } from "pg";
-import config from "../config/config.js";
 
 const pool = new Pool({
   host: "aws-1-ap-northeast-2.pooler.supabase.com",
