@@ -2,9 +2,14 @@ import { pool } from "../../db/index.js";
 import { type Issue } from "./issue.repository.js";
 
 export const getAllIssuesFromDB = async () => {
-  const dbResponse = await pool.query(`
+  const dbResponse = await pool.query<Issue>(`
       SELECT * FROM issues;
       `);
+
+  // dbResponse.rows.map((issue) => {
+  //   const reporter = pool.query(``)
+  //   issue.reporter_id
+  // });
   return dbResponse.rows as Issue[];
 };
 

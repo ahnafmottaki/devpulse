@@ -10,7 +10,7 @@ export const getAllIssues = async (req: Request, res: Response) => {
       res,
       statusCode: StatusCodes.OK,
       success: true,
-      message: "All issues retrieved successfully",
+      message: "Issue retrived successfully",
       data: issues,
     });
   } catch (err) {
