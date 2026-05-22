@@ -1,10 +1,33 @@
 import { type Request, type Response } from "express";
-import type { RegisterBody } from "./auth.repository.js";
+import type { LoginBody, RegisterBody } from "./auth.repository.js";
 import { authService } from "./auth.service.js";
 import sendResponse from "../../utils/sendResponse.js";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 
-export const login = (req: Request, res: Response) => {};
+export const login = async (req: Request, res: Response) => {
+  const loginCredentials: LoginBody = req.body;
+  try {
+    const data = await authService.loginUser(loginCredentials);
+    sendResponse({
+      res,
+      success: true,
+      message: "Login successful",
+      statusCode: StatusCodes.OK,
+      data,
+    });
+  } catch (err) {
+    sendResponse({
+      res,
+      statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+      success: false,
+      message:
+        err instanceof Error
+          ? err.message
+          : ReasonPhrases.INTERNAL_SERVER_ERROR,
+      err: err as Record<any, any>,
+    });
+  }
+};
 
 export const register = async (req: Request, res: Response) => {
   const userDetails: RegisterBody = req.body;
@@ -18,7 +41,6 @@ export const register = async (req: Request, res: Response) => {
       data: createdUser,
     });
   } catch (err) {
-    console.log(err);
     sendResponse({
       res,
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

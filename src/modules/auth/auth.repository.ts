@@ -9,3 +9,5 @@ export interface User {
 }
 
 export type RegisterBody = Pick<User, "name" | "email" | "password" | "role">;
+
+export type LoginBody = Pick<User, "email" | "password">;

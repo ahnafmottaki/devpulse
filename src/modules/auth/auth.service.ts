@@ -1,9 +1,35 @@
 import config from "../../config/config.js";
 import { pool } from "../../db/index.js";
-import { type RegisterBody, type User } from "./auth.repository.js";
+import { getJwtToken } from "../../utils/getJwtToken.js";
+import {
+  type LoginBody,
+  type RegisterBody,
+  type User,
+} from "./auth.repository.js";
 import bcrypt from "bcryptjs";
 
-const loginUser = async () => {};
+const loginUser = async (loginCredentials: LoginBody) => {
+  const { email, password } = loginCredentials;
+  const getUserResult = await pool.query<User>(
+    `
+    SELECT * FROM users WHERE email = $1
+    `,
+    [email],
+  );
+
+  if (getUserResult.rowCount === 0) {
+    throw new Error("User Not Found!");
+  }
+  const user = getUserResult.rows[0]!;
+  const isPasswordValid = bcrypt.compare(password, user.password);
+  if (!isPasswordValid) throw new Error("Invalid Email or Password!");
+  const { password: pass, ...rest } = user;
+  const token = getJwtToken({ id: rest.id, name: rest.name, role: rest.role });
+  return {
+    token,
+    user: rest,
+  };
+};
 
 const registerUser = async (userDetails: RegisterBody) => {
   const { name, email, password, role } = userDetails;
