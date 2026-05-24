@@ -5,52 +5,80 @@ import sendResponse from "../../utils/sendResponse.js";
 import type { CreateIssueProp } from "./issue.repository.js";
 
 export const getAllIssues = async (req: Request, res: Response) => {
-    try {
-        const issues = await issueService.getAllIssuesFromDB();
-        sendResponse({
-            res,
-            statusCode: StatusCodes.OK,
-            success: true,
-            message: "Issue retrived successfully",
-            data: issues,
-        });
-    } catch (err) {
-        sendResponse({
-            res,
-            statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
-            success: false,
-            message: ReasonPhrases.INTERNAL_SERVER_ERROR,
-        });
-    }
+  try {
+    const issues = await issueService.getAllIssuesFromDB();
+    sendResponse({
+      res,
+      statusCode: StatusCodes.OK,
+      success: true,
+      message: "Issue retrived successfully",
+      data: issues,
+    });
+  } catch (err) {
+    sendResponse({
+      res,
+      statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+      success: false,
+      message: ReasonPhrases.INTERNAL_SERVER_ERROR,
+    });
+  }
 };
 
-export const getIssueById = async (req: Request, res: Response) => {};
+export const getIssueById = async (
+  req: Request<{ id: string }>,
+  res: Response,
+) => {
+  const id = parseInt(req.params.id);
+  if (Number.isNaN(id)) {
+    throw new Error("Invalid id parameter");
+  }
+  try {
+    const issue = await issueService.getIssueByIdFromDB(id);
+    if (!issue) {
+      throw new Error("Issue Not Found");
+    }
+    sendResponse({
+      res,
+      statusCode: StatusCodes.OK,
+      success: true,
+      message: "Issue retrived successfully",
+      data: issue,
+    });
+  } catch (err) {
+    sendResponse({
+      res,
+      statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+      success: false,
+      message: ReasonPhrases.INTERNAL_SERVER_ERROR,
+    });
+  }
+};
 
 export const createIssue = async (req: Request, res: Response) => {
-    try {
-        const issueBody: CreateIssueProp = req.body;
-        const user = req.user;
-        if (!user) throw new Error("User not found");
-        const reporter_id = user.id;
-        const createdIssue = await issueService.createIssueIntoDB(
-            issueBody,
-            reporter_id,
-        );
-        sendResponse({
-            res,
-            success: true,
-            statusCode: StatusCodes.CREATED,
-            message: "Issue Created successfully",
-            data: createdIssue,
-        });
-    } catch (err) {
-        sendResponse({
-            res,
-            statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
-            success: false,
-            message: ReasonPhrases.INTERNAL_SERVER_ERROR,
-        });
-    }
+  try {
+    const issueBody: CreateIssueProp = req.body;
+    const user = req.user;
+    if (!user) throw new Error("User not found");
+    const reporter_id = user.id;
+    const createdIssue = await issueService.createIssueIntoDB(
+      issueBody,
+      reporter_id,
+    );
+    sendResponse({
+      res,
+      success: true,
+      statusCode: StatusCodes.CREATED,
+      message: "Issue Created successfully",
+      data: createdIssue,
+    });
+  } catch (err) {
+    sendResponse({
+      res,
+      statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+      success: false,
+      message: ReasonPhrases.INTERNAL_SERVER_ERROR,
+    });
+  }
 };
 
 export const updateIssue = async (req: Request, res: Response) => {};
@@ -58,9 +86,9 @@ export const updateIssue = async (req: Request, res: Response) => {};
 export const deleteIssue = async (req: Request, res: Response) => {};
 
 export const issueController = {
-    getAllIssues,
-    getIssueById,
-    createIssue,
-    updateIssue,
-    deleteIssue,
+  getAllIssues,
+  getIssueById,
+  createIssue,
+  updateIssue,
+  deleteIssue,
 };
