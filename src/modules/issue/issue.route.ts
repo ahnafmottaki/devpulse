@@ -9,12 +9,16 @@ router.get("/", issueController.getAllIssues);
 router.get("/:id", issueController.getIssueById);
 
 router.post(
-    "/",
-    authMiddleware("contributor", "maintainer"),
-    issueController.createIssue,
+  "/",
+  authMiddleware("contributor", "maintainer"),
+  issueController.createIssue,
 );
 
-router.put("/:id", issueController.updateIssue);
+router.patch(
+  "/:id",
+  authMiddleware("maintainer", "contributor"),
+  issueController.updateIssue,
+);
 
 router.delete("/:id", issueController.deleteIssue);
 
