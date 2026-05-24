@@ -105,7 +105,6 @@ export const updateIssue = async (
             data: updatedResult,
         });
     } catch (err) {
-        console.log(err);
         sendResponse({
             res,
             statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
@@ -115,7 +114,31 @@ export const updateIssue = async (
     }
 };
 
-export const deleteIssue = async (req: Request, res: Response) => {};
+export const deleteIssue = async (
+    req: Request<{ id: string }>,
+    res: Response,
+) => {
+    const id = parseInt(req.params.id);
+    if (Number.isNaN(id)) {
+        throw new Error("Invalid id parameter");
+    }
+    try {
+        await issueService.deleteIssueFromDB(id);
+        sendResponse({
+            res,
+            statusCode: StatusCodes.OK,
+            success: true,
+            message: "Issue deleted successfully",
+        });
+    } catch (err) {
+        sendResponse({
+            res,
+            statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+            success: false,
+            message: ReasonPhrases.INTERNAL_SERVER_ERROR,
+        });
+    }
+};
 
 export const issueController = {
     getAllIssues,

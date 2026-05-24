@@ -9,17 +9,21 @@ router.get("/", issueController.getAllIssues);
 router.get("/:id", issueController.getIssueById);
 
 router.post(
-  "/",
-  authMiddleware("contributor", "maintainer"),
-  issueController.createIssue,
+    "/",
+    authMiddleware("contributor", "maintainer"),
+    issueController.createIssue,
 );
 
 router.patch(
-  "/:id",
-  authMiddleware("maintainer", "contributor"),
-  issueController.updateIssue,
+    "/:id",
+    authMiddleware("maintainer", "contributor"),
+    issueController.updateIssue,
 );
 
-router.delete("/:id", issueController.deleteIssue);
+router.delete(
+    "/:id",
+    authMiddleware("maintainer"),
+    issueController.deleteIssue,
+);
 
 export default router;
