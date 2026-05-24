@@ -29,8 +29,13 @@ export const getIssueById = async (req: Request, res: Response) => {};
 export const createIssue = async (req: Request, res: Response) => {
     try {
         const issueBody: CreateIssueProp = req.body;
-        const reporter_id = req.user.id;
-        const createdIssue = issueService.createIssueIntoDB(issueBody);
+        const user = req.user;
+        if (!user) throw new Error("User not found");
+        const reporter_id = user.id;
+        const createdIssue = await issueService.createIssueIntoDB(
+            issueBody,
+            reporter_id,
+        );
         sendResponse({
             res,
             success: true,

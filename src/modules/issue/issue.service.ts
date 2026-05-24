@@ -27,7 +27,7 @@ export const createIssueIntoDB = async (
     `,
         [data.title, data.description, data.type, reported_id],
     );
-    return dbResponse.rows[0];
+    return dbResponse.rows[0]!;
 };
 
 export const updateIssueIntoDB = async (id: string, data: Partial<Issue>) => {};
