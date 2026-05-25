@@ -49,7 +49,11 @@ export const getIssueById = async (
             res,
             statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
             success: false,
-            message: ReasonPhrases.INTERNAL_SERVER_ERROR,
+            message:
+                err instanceof Error
+                    ? err.message
+                    : ReasonPhrases.INTERNAL_SERVER_ERROR,
+            err: err,
         });
     }
 };
@@ -76,7 +80,11 @@ export const createIssue = async (req: Request, res: Response) => {
             res,
             statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
             success: false,
-            message: ReasonPhrases.INTERNAL_SERVER_ERROR,
+            message:
+                err instanceof Error
+                    ? err.message
+                    : ReasonPhrases.INTERNAL_SERVER_ERROR,
+            err: err,
         });
     }
 };
@@ -109,7 +117,11 @@ export const updateIssue = async (
             res,
             statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
             success: false,
-            message: ReasonPhrases.INTERNAL_SERVER_ERROR,
+            message:
+                err instanceof Error
+                    ? err.message
+                    : ReasonPhrases.INTERNAL_SERVER_ERROR,
+            err: err,
         });
     }
 };
@@ -135,7 +147,11 @@ export const deleteIssue = async (
             res,
             statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
             success: false,
-            message: ReasonPhrases.INTERNAL_SERVER_ERROR,
+            message:
+                err instanceof Error
+                    ? err.message
+                    : ReasonPhrases.INTERNAL_SERVER_ERROR,
+            err: err,
         });
     }
 };

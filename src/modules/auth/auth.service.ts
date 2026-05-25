@@ -38,6 +38,14 @@ const loginUser = async (loginCredentials: LoginBody) => {
 
 const registerUser = async (userDetails: RegisterBody) => {
     const { name, email, password, role } = userDetails;
+    const doesUserExist = await pool.query<User>(
+        `
+        SELECT * FROM users WHERE email = $1
+        `,
+        [email],
+    );
+    if (doesUserExist.rows.length > 0) throw new Error("User already exists!");
+
     const hashedPassword = await bcrypt.hash(password, config.bcryptSaltRounds);
     const dbResponse = await pool.query<User>(
         `

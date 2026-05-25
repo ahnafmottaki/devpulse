@@ -33,9 +33,6 @@ const initializeDatabase = async () => {
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
-
-  console.log("Database initialized successfully.");
-  console.log("Tables 'users' and 'issues' are ready.");
 };
 
 export { pool, initializeDatabase };
